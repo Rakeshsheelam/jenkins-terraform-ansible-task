@@ -35,7 +35,18 @@ pipeline {
             steps {
                 script {
                    sleep '100'
-                    ansiblePlaybook becomeUser: 'ec2-user', credentialsId: 'AWS', disableHostKeyChecking: true, installation: 'ansible', inventory: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/inventory.yaml', playbook: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/amazon-playbook.yml', vaultTmpPath: ''
+                    ansiblePlaybook becomeUser: 'ec2-user', 
+                credentialsId: 'AWS', 
+                disableHostKeyChecking: true, 
+                installation: 'ansible', 
+                inventory: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/inventory.yaml', 
+                playbook: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/amazon-playbook.yml', 
+                vaultTmpPath: '', 
+                extraVars: [
+                    ansible_ssh_private_key_file: '/root/sydney.pem'
+                ]
+
+                    //ansiblePlaybook becomeUser: 'ec2-user', credentialsId: 'AWS', disableHostKeyChecking: true, installation: 'ansible', inventory: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/inventory.yaml', playbook: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/amazon-playbook.yml', vaultTmpPath: ''
                     ansiblePlaybook become: true, credentialsId: 'AWS', disableHostKeyChecking: true, installation: 'ansible', inventory: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/inventory.yaml', playbook: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/ubuntu-playbook.yml', vaultTmpPath: ''
                 }
             }
