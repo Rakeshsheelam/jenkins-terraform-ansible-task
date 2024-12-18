@@ -1,12 +1,11 @@
 pipeline {
     agent any
     environment {
-        AWS_ACCESS_KEY_ID = credentials('AWS')  // ID from Jenkins credentials store
-        AWS_SECRET_ACCESS_KEY = credentials('AWS')  // ID from Jenkins credentials store
+        AWS_ACCESS_KEY_ID = credentials('AWS')  // AWS credentials (access key ID and secret key)
+        AWS_SECRET_ACCESS_KEY = credentials('AWS')  // AWS secret key
     }
 
     stages {
-        
         stage('Checkout') {
             steps {
                 deleteDir()
@@ -33,7 +32,7 @@ pipeline {
             steps {
                 script {
                     sleep '100'
-                    // Use withCredentials block to inject SSH private key for Ansible
+                    // Use withCredentials block to inject the SSH private key
                     withCredentials([file(credentialsId: 'AWS_SSH_KEY', variable: 'SSH_PRIVATE_KEY')]) {
                         ansiblePlaybook(
                             becomeUser: 'ec2-user',  // or 'ubuntu' for Ubuntu instances
@@ -44,7 +43,7 @@ pipeline {
                             playbook: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/amazon-playbook.yml',
                             vaultTmpPath: '',
                             extraVars: [
-                                ansible_ssh_private_key_file: "${SSH_PRIVATE_KEY}"  // Dynamically pass SSH key from Jenkins credentials
+                                ansible_ssh_private_key_file: "${SSH_PRIVATE_KEY}"  // Dynamically inject the SSH private key
                             ]
                         )
                     }
@@ -58,7 +57,7 @@ pipeline {
                             playbook: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/ubuntu-playbook.yml',
                             vaultTmpPath: '',
                             extraVars: [
-                                ansible_ssh_private_key_file: "${SSH_PRIVATE_KEY}"  // Dynamically pass SSH key from Jenkins credentials
+                                ansible_ssh_private_key_file: "${SSH_PRIVATE_KEY}"  // Dynamically inject the SSH private key
                             ]
                         )
                     }
