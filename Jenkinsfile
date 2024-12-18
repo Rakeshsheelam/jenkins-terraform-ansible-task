@@ -1,9 +1,6 @@
 pipeline {
     agent any
-    environment {
-        AWS_ACCESS_KEY_ID = credentials('AWS')  // AWS credentials (access key ID and secret key)
-        AWS_SECRET_ACCESS_KEY = credentials('AWS')  // AWS secret key
-    }
+    
 
     stages {
         stage('Checkout') {
@@ -19,48 +16,22 @@ pipeline {
                 script {
                     dir('/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/') {
                         sh 'pwd'
-                        sh 'terraform init'
-                        sh 'terraform validate'
-                        sh 'terraform destroy -auto-approve'
-                        sh 'terraform apply -auto-approve'
+                    sh 'terraform init'
+                    sh 'terraform validate'
+                    // sh 'terraform destroy -auto-approve'
+                    sh 'terraform plan'
+                    sh 'terraform apply -auto-approve'
                     }
                 }
             }
         }
-
+        
         stage('Ansible Deployment') {
             steps {
                 script {
-                    sleep '100'
-                    // Use withCredentials block to inject the SSH private key
-                    withCredentials([file(credentialsId: 'AWS_SSH_KEY', variable: 'SSH_PRIVATE_KEY')]) {
-                        ansiblePlaybook(
-                            becomeUser: 'ec2-user',  // or 'ubuntu' for Ubuntu instances
-                            credentialsId: 'AWS',  // Your AWS credentials
-                            disableHostKeyChecking: true,
-                            installation: 'ansible',
-                            inventory: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/inventory.yaml',
-                            playbook: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/amazon-playbook.yml',
-                            vaultTmpPath: '',
-                            extraVars: [
-                                ansible_ssh_private_key_file: "${SSH_PRIVATE_KEY}"  // Dynamically inject the SSH private key
-                            ]
-                        )
-                    }
-                    withCredentials([file(credentialsId: 'AWS_SSH_KEY', variable: 'SSH_PRIVATE_KEY')]) {
-                        ansiblePlaybook(
-                            become: true,
-                            credentialsId: 'AWS',
-                            disableHostKeyChecking: true,
-                            installation: 'ansible',
-                            inventory: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/inventory.yaml',
-                            playbook: '/var/lib/jenkins/workspace/challenge_ansible_jenkins/jenkins-terraform-ansible-task/ubuntu-playbook.yml',
-                            vaultTmpPath: '',
-                            extraVars: [
-                                ansible_ssh_private_key_file: "${SSH_PRIVATE_KEY}"  // Dynamically inject the SSH private key
-                            ]
-                        )
-                    }
+                   sleep '150'
+                    ansiblePlaybook becomeUser: 'ec2-user', credentialsId: 'amazonlinux', disableHostKeyChecking: true, installation: 'ansible', inventory: '/var/lib/jenkins/workspace/ansible-terraform-jenkins/jenkins-terraform-ansible-task/inventory.yaml', playbook: '/var/lib/jenkins/workspace/ansible-terraform-jenkins/jenkins-terraform-ansible-task/amazon-playbook.yml', vaultTmpPath: ''
+                    ansiblePlaybook becomeUser: 'ubuntu', credentialsId: 'ubuntuuser', disableHostKeyChecking: true, installation: 'ansible', inventory: '/var/lib/jenkins/workspace/ansible-terraform-jenkins/jenkins-terraform-ansible-task/inventory.yaml', playbook: '/var/lib/jenkins/workspace/ansible-terraform-jenkins/jenkins-terraform-ansible-task/ubuntu-playbook.yml', vaultTmpPath: ''
                 }
             }
         }
