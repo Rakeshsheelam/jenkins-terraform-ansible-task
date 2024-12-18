@@ -21,7 +21,7 @@ EOF
 
 }
 
-resource "aws_instance" "backend" {
+resource "aws_instance" "frontend" {
   ami           = "ami-0d6560f3176dc9ec0"  # Use the Amazon Linux AMI ID
   instance_type = "t2.micro"
   key_name      = "sydney"
