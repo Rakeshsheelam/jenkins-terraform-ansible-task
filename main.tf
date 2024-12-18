@@ -47,9 +47,9 @@ resource "local_file" "inventory" {
   filename = "./inventory.yaml"
   content  = <<EOF
 [frontend]
-c8.local
+${aws_instance.frontend.public_ip}
 [backend]
-u21.local
+${aws_instance.backend.public_ip}
 EOF
 }
 
@@ -58,5 +58,5 @@ output "frontend_public_ip" {
 }
 
 output "backend_public_ip" {
-  value = aws_instance.backend.U21.local
+  value = aws_instance.backend.public_ip
 }
