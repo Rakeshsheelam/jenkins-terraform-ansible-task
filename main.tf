@@ -2,11 +2,10 @@ provider "aws" {
   region = "ap-southeast-2"
 }
 
-resource "aws_instance" "backend" { #ubuntu.yaml NETADATA
-  ami                    = "ami-003f5a76758516d1e"
-  instance_type          = "t2.micro" 
-  key_name               = "sydney"
-  vpc_security_group_ids = ["sg-06ac100aa9261d2ac"]
+resource "aws_instance" "u21" {
+  ami           = "ami-003f5a76758516d1e"  # Use the Ubuntu 21.04 AMI ID
+  instance_type = "t2.micro"
+  key_name      = "sydney"
   tags = {
     Name = "u21.local"
   }
@@ -22,15 +21,15 @@ EOF
 
 }
 
-resource "aws_instance" "frontend" { #amazon-playbook.yaml NGINX
-  ami                    = "ami-0d6560f3176dc9ec0"
-  instance_type          = "t2.micro"
-  key_name               = "sydney"
-  vpc_security_group_ids = ["sg-06ac100aa9261d2ac"]
+resource "aws_instance" "c8" {
+  ami           = "ami-0d6560f3176dc9ec0"  # Use the Amazon Linux AMI ID
+  instance_type = "t2.micro"
+  key_name      = "sydney"
   tags = {
     Name = "c8.local"
   }
-  user_data = <<-EOF
+  
+user_data = <<-EOF
   #!/bin/bash
   # New hostname and IP address
   sudo hostnamectl set-hostname u21.local
