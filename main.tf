@@ -2,7 +2,7 @@ provider "aws" {
   region = "ap-southeast-2"
 }
 
-resource "aws_instance" "u21" {
+resource "aws_instance" "backend" {
   ami           = "ami-003f5a76758516d1e"  # Use the Ubuntu 21.04 AMI ID
   instance_type = "t2.micro"
   key_name      = "sydney"
@@ -21,7 +21,7 @@ EOF
 
 }
 
-resource "aws_instance" "c8" {
+resource "aws_instance" "backend" {
   ami           = "ami-0d6560f3176dc9ec0"  # Use the Amazon Linux AMI ID
   instance_type = "t2.micro"
   key_name      = "sydney"
