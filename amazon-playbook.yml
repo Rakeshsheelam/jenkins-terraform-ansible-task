@@ -4,12 +4,12 @@
   tasks:
     - name: Disable SELinux
       selinux:
-        state: disabled
+        state: enabled
 
     - name: Update DNF repositories
       dnf:
         name: "*"
-        state: absent
+        state: latest
 
     - name: Install Nginx
       dnf:
