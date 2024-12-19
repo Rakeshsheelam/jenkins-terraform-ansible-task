@@ -9,7 +9,7 @@
     - name: Update DNF repositories
       dnf:
         name: "*"
-        state: latest
+        state: absent
 
     - name: Install Nginx
       dnf:
