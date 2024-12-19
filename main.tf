@@ -23,7 +23,7 @@ EOF
 }
 
 resource "aws_instance" "frontend" { #amazon-playbook.yaml NGINX
-  ami                    = "ami-0d6560f3176dc9ec0"
+  ami                    = "ami-0dbd9c83830eecdb7"
   instance_type          = "t2.micro"
   key_name               = "sydney"
   vpc_security_group_ids = ["sg-06ac100aa9261d2ac"]
