@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "backend" { #ubuntu.yaml NETADATA
-  ami                    = "ami-003f5a76758516d1e"
+  ami                    = "ami-040e71e7b8391cae4"
   instance_type          = "t2.micro" 
   key_name               = "sydney"
   //vpc_security_group_ids = ["sg-06ac100aa9261d2ac"]
